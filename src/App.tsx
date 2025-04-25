@@ -1,35 +1,65 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import Layout from './components/Layout';
+import HomePage from './pages/HomePage';
+import ReportIssuePage from './pages/ReportIssuePage';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
 
-function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+interface User {
+  name?: string;
+  email: string;
+  password?: string;
 }
 
-export default App
+function App() {
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
+  const handleLogin = (email: string) => {
+    const loggedUser: User = { email };
+    localStorage.setItem('user', JSON.stringify(loggedUser));
+    setUser(loggedUser);
+  };
+
+  const handleRegister = (name: string, email: string, password: string) => {
+    const newUser: User = { name, email, password };
+    localStorage.setItem('user', JSON.stringify(newUser));
+    setUser(newUser);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    setUser(null);
+  };
+
+  return (
+    <Routes>
+      <Route element={<Layout user={user} onLogout={handleLogout} />}>
+        <Route index element={<HomePage user={user} />} />
+        <Route path="report-issue" element={<ReportIssuePage user={user} />} />
+        <Route 
+          path="login" 
+          element={
+            user ? <Navigate to="/" replace /> : <LoginPage onLogin={handleLogin} />
+          } 
+        />
+        <Route 
+          path="register" 
+          element={
+            user ? <Navigate to="/" replace /> : <RegisterPage onRegister={handleRegister} />
+          } 
+        />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Route>
+    </Routes>
+  );
+}
+
+export default App;
