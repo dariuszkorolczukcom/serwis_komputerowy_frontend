@@ -34,6 +34,9 @@ const Layout: React.FC<LayoutProps> = ({ user, onLogout }) => {
               <Typography variant="body1" sx={{ mx: 2 }}>
                 Witaj, {user.name ? user.name : user.email}!
               </Typography>
+              <Button component={RouterLink} to="/my-issues" color="inherit">
+                Twoje Zgłoszenia
+              </Button>
               <Button color="inherit" onClick={onLogout}>
                 Wyloguj
               </Button>

@@ -5,6 +5,7 @@ import HomePage from './pages/HomePage';
 import ReportIssuePage from './pages/ReportIssuePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import UserIssuesPage from './pages/UserIssuesPage';
 
 interface User {
   name?: string;
@@ -56,6 +57,7 @@ function App() {
             user ? <Navigate to="/" replace /> : <RegisterPage onRegister={handleRegister} />
           } 
         />
+        <Route path="my-issues" element={<UserIssuesPage user={user} />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>
