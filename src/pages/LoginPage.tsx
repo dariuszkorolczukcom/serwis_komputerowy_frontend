@@ -10,13 +10,15 @@ const LoginPage: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = async () => {
+
+  const handleLogin = async (event: React.FormEvent) => {
+    event.preventDefault();
     try {
       const data = await login(username, password);
-      console.log(data)
+      console.log(data);
       localStorage.setItem('access', data.access);
       localStorage.setItem('refresh', data.refresh);
-      // Przekierowanie lub aktualizacja stanu aplikacji
+      // TODO: Implement your navigation logic here
     } catch (error) {
       console.error('Błąd logowania:', error);
       setError("Niepoprawny email lub hasło");
