@@ -1,24 +1,26 @@
 import { useState } from 'react';
 import { TextField, Button, Typography, Alert, Box } from '@mui/material';
 import React from 'react';
+import { login } from '../api/auth';
 
-interface LoginPageProps {
-  onLogin: (email: string) => void;
-}
-
-const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const LoginPage: React.FC = () => {
+  
   const [error, setError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    if (!email.trim() || !password.trim()) {
-      setError('Proszę wypełnić oba pola.');
-      return;
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleLogin = async () => {
+    try {
+      const data = await login(username, password);
+      console.log(data)
+      localStorage.setItem('access', data.access);
+      localStorage.setItem('refresh', data.refresh);
+      // Przekierowanie lub aktualizacja stanu aplikacji
+    } catch (error) {
+      console.error('Błąd logowania:', error);
+      setError("Niepoprawny email lub hasło");
     }
-    onLogin(email);
   };
 
   return (
@@ -27,14 +29,14 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
         Logowanie
       </Typography>
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-      <Box component="form" onSubmit={handleSubmit} noValidate>
+      <Box component="form" onSubmit={handleLogin} noValidate>
         <TextField 
           fullWidth 
           margin="normal" 
-          type="email" 
-          label="Email" 
-          value={email} 
-          onChange={e => setEmail(e.target.value)} 
+          type="username" 
+          label="Username" 
+          value={username} 
+          onChange={e => setUsername(e.target.value)} 
           required 
         />
         <TextField 

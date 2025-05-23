@@ -5,7 +5,7 @@ import HomePage from './pages/HomePage';
 import ReportIssuePage from './pages/ReportIssuePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
-import UserIssuesPage from './pages/UserIssuesPage';
+import TicketListPage from './pages/TicketListPage';
 
 interface User {
   name?: string;
@@ -23,17 +23,17 @@ function App() {
     }
   }, []);
 
-  const handleLogin = (email: string) => {
-    const loggedUser: User = { email };
-    localStorage.setItem('user', JSON.stringify(loggedUser));
-    setUser(loggedUser);
-  };
+  // const handleLogin = (email: string) => {
+  //   const loggedUser: User = { email };
+  //   localStorage.setItem('user', JSON.stringify(loggedUser));
+  //   setUser(loggedUser);
+  // };
 
-  const handleRegister = (name: string, email: string, password: string) => {
-    const newUser: User = { name, email, password };
-    localStorage.setItem('user', JSON.stringify(newUser));
-    setUser(newUser);
-  };
+  // const handleRegister = (name: string, email: string, password: string) => {
+  //   const newUser: User = { name, email, password };
+  //   localStorage.setItem('user', JSON.stringify(newUser));
+  //   setUser(newUser);
+  // };
 
   const handleLogout = () => {
     localStorage.removeItem('user');
@@ -44,20 +44,20 @@ function App() {
     <Routes>
       <Route element={<Layout user={user} onLogout={handleLogout} />}>
         <Route index element={<HomePage user={user} />} />
-        <Route path="report-issue" element={<ReportIssuePage user={user} />} />
+        <Route path="add-ticket" element={<ReportIssuePage user={user} />} />
         <Route 
           path="login" 
           element={
-            user ? <Navigate to="/" replace /> : <LoginPage onLogin={handleLogin} />
+            user ? <Navigate to="/" replace /> : <LoginPage />
           } 
         />
         <Route 
           path="register" 
           element={
-            user ? <Navigate to="/" replace /> : <RegisterPage onRegister={handleRegister} />
+            user ? <Navigate to="/" replace /> : <RegisterPage />
           } 
         />
-        <Route path="my-issues" element={<UserIssuesPage user={user} />} />
+        <Route path="tickets" element={<TicketListPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>

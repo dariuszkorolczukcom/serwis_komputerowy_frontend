@@ -19,7 +19,7 @@ const HomePage: React.FC<HomePageProps> = ({ user }) => {
       <Box sx={{ my: 3 }}>
         <Button 
           component={RouterLink} 
-          to="/report-issue" 
+          to="/add-ticket" 
           variant="contained" 
           color="secondary" 
           size="large" 

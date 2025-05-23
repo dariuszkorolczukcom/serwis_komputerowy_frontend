@@ -23,7 +23,7 @@ const Layout: React.FC<LayoutProps> = ({ user, onLogout }) => {
           </Typography>
           <Button 
             component={RouterLink} 
-            to="/report-issue" 
+            to="/add-ticket" 
             color="inherit" 
             startIcon={<ReportProblemOutlinedIcon />}
           >
@@ -34,7 +34,7 @@ const Layout: React.FC<LayoutProps> = ({ user, onLogout }) => {
               <Typography variant="body1" sx={{ mx: 2 }}>
                 Witaj, {user.name ? user.name : user.email}!
               </Typography>
-              <Button component={RouterLink} to="/my-issues" color="inherit">
+              <Button component={RouterLink} to="/tickets" color="inherit">
                 Twoje Zgłoszenia
               </Button>
               <Button color="inherit" onClick={onLogout}>
