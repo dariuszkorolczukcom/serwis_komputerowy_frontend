@@ -13,7 +13,8 @@ import ActivateUserPage from './pages/ActivateUserPage';
 function App() {
   const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(null);
-
+  const [isStaff, setIsStaff] = useState(false);
+  const [isSuperuser, setIsSuperuser] = useState(false);
   const handleLogout = () => {
     localStorage.removeItem('user');
     setUser(null);
@@ -25,12 +26,18 @@ function App() {
   return (
     <Routes>
       <Route element={<Layout user={user} onLogout={handleLogout} />}>
-        <Route index element={<HomePage user={user} />} />
+        <Route index element={<HomePage user={user} isStaff={isStaff} isSuperuser={isSuperuser} />} />
         <Route path="add-ticket" element={<ReportIssuePage user={user} />} />
         <Route 
           path="login" 
           element={
-            user ? <Navigate to="/" replace /> : <LoginPage setUser={setUser} />
+            user ? <Navigate to="/" replace /> 
+            : 
+            <LoginPage 
+              setUser={setUser} 
+              setIsStaff={setIsStaff} 
+              setIsSuperuser={setIsSuperuser} 
+            />
           } 
         />
         <Route 
@@ -39,9 +46,9 @@ function App() {
             user ? <Navigate to="/" replace /> : <RegisterPage />
           } 
         />
-        <Route path="tickets" element={<TicketListPage />} />
+        <Route path="tickets" element={<TicketListPage user={user} isStaff={isStaff} />} />
         <Route path="*" element={<Navigate to="/" replace />} />
-        <Route path="/activate/:token/:uid" element={<ActivateUserPage />} />
+        <Route path="/activate/:uid/:token" element={<ActivateUserPage />} />
       </Route>
     </Routes>
   );

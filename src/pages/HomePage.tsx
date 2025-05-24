@@ -7,10 +7,12 @@ import React from 'react';
 
 interface HomePageProps {
   user: { name?: string; email: string } | null;
+  isStaff: boolean;
+  isSuperuser: boolean;
 }
 
-const HomePage: React.FC<HomePageProps> = ({ user }) => {
-  console.log('HomePage user:', user);
+const HomePage: React.FC<HomePageProps> = ({ user, isStaff, isSuperuser }) => {
+  console.log('HomePage user:', user, isStaff, isSuperuser);
   return (
     <>
     <Box sx={{ textAlign: 'center', py: 4 }}>

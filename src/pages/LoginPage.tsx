@@ -3,15 +3,22 @@ import { TextField, Button, Typography, Alert, Box } from '@mui/material';
 import React from 'react';
 import { login, getUser } from '../api/auth';
 import { useNavigate } from 'react-router-dom';
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode, JwtPayload } from "jwt-decode";
 import { Dispatch, SetStateAction } from 'react';
 import User from '../types/user';
 
 interface LoginPageProps {
   setUser: Dispatch<SetStateAction<User | null>>;
+  setIsStaff: Dispatch<SetStateAction<boolean>>;
+  setIsSuperuser: Dispatch<SetStateAction<boolean>>;
 }
 
-function LoginPage({ setUser }: LoginPageProps) {
+interface CustomJwtPayload extends JwtPayload {
+  is_staff: boolean;
+  is_superuser: boolean;
+}
+
+function LoginPage({ setUser, setIsStaff, setIsSuperuser }: LoginPageProps) {
   const navigate = useNavigate();
   const [error, setError] = useState('');
 
@@ -26,8 +33,10 @@ function LoginPage({ setUser }: LoginPageProps) {
       localStorage.setItem('access', data.access);
       localStorage.setItem('refresh', data.refresh);
       setError("");
-      const decoded = jwtDecode(data.access);
+      const decoded = jwtDecode<CustomJwtPayload>(data.access);
       console.log("decoded JWT",decoded);
+      setIsStaff(decoded.is_staff)
+      setIsSuperuser(decoded.is_superuser)
       const user = await getUser()
       localStorage.setItem('user', JSON.stringify(user));
       console.log('Stored user:', user);
