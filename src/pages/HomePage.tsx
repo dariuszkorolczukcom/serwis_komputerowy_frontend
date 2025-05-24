@@ -1,4 +1,6 @@
 import { Typography, Button, Grid, Box } from '@mui/material';
+// import { styled, Theme } from '@mui/material/styles';
+
 import { Link as RouterLink } from 'react-router-dom';
 import ReportProblemOutlinedIcon from '@mui/icons-material/ReportProblemOutlined';
 import React from 'react';
@@ -8,7 +10,9 @@ interface HomePageProps {
 }
 
 const HomePage: React.FC<HomePageProps> = ({ user }) => {
+  console.log('HomePage user:', user);
   return (
+    <>
     <Box sx={{ textAlign: 'center', py: 4 }}>
       <Typography variant="h3" component="h1" gutterBottom>
         Witamy w SerwisApp
@@ -30,7 +34,7 @@ const HomePage: React.FC<HomePageProps> = ({ user }) => {
       </Box>
 
       <Grid container spacing={2} sx={{ mt: 4 }}>
-        <Grid item xs={12} md={4}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <Typography variant="h5" component="h2" gutterBottom align="center">
             Prosty formularz
           </Typography>
@@ -38,7 +42,7 @@ const HomePage: React.FC<HomePageProps> = ({ user }) => {
             Wypełnij intuicyjny formularz zgłoszenia awarii, podając najważniejsze informacje.
           </Typography>
         </Grid>
-        <Grid item xs={12} md={4}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <Typography variant="h5" component="h2" gutterBottom align="center">
             Szybka reakcja
           </Typography>
@@ -46,7 +50,7 @@ const HomePage: React.FC<HomePageProps> = ({ user }) => {
             Nasz zespół natychmiast otrzyma Twoje zgłoszenie i niezwłocznie rozpocznie działania.
           </Typography>
         </Grid>
-        <Grid item xs={12} md={4}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <Typography variant="h5" component="h2" gutterBottom align="center">
             Śledzenie statusu
           </Typography>
@@ -59,6 +63,7 @@ const HomePage: React.FC<HomePageProps> = ({ user }) => {
         </Grid>
       </Grid>
     </Box>
+    </>
   );
 };
 

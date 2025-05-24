@@ -1,43 +1,25 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import User from './types/user';
 import Layout from './components/Layout';
 import HomePage from './pages/HomePage';
 import ReportIssuePage from './pages/ReportIssuePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import TicketListPage from './pages/TicketListPage';
+// import User from './types/user';
 
-interface User {
-  name?: string;
-  email: string;
-  password?: string;
-}
 
 function App() {
+  const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
-
-  // const handleLogin = (email: string) => {
-  //   const loggedUser: User = { email };
-  //   localStorage.setItem('user', JSON.stringify(loggedUser));
-  //   setUser(loggedUser);
-  // };
-
-  // const handleRegister = (name: string, email: string, password: string) => {
-  //   const newUser: User = { name, email, password };
-  //   localStorage.setItem('user', JSON.stringify(newUser));
-  //   setUser(newUser);
-  // };
 
   const handleLogout = () => {
     localStorage.removeItem('user');
     setUser(null);
+    localStorage.removeItem('access');
+    localStorage.removeItem('refresh');
+    navigate('/'); 
   };
 
   return (
@@ -48,7 +30,7 @@ function App() {
         <Route 
           path="login" 
           element={
-            user ? <Navigate to="/" replace /> : <LoginPage />
+            user ? <Navigate to="/" replace /> : <LoginPage setUser={setUser} />
           } 
         />
         <Route 

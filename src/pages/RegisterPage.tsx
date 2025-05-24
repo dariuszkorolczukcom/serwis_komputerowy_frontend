@@ -24,6 +24,7 @@ const RegisterPage: React.FC = () => {
         username: name,
         email,
         password,
+        re_password: password,
       });
 
       if (response.status === 201) {

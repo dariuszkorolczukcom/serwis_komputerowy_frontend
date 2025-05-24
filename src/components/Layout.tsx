@@ -2,13 +2,13 @@ import { Outlet, Link as RouterLink } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Button, Box, Container } from '@mui/material';
 import ReportProblemOutlinedIcon from '@mui/icons-material/ReportProblemOutlined';
 import React from 'react';
-
+import User from '../types/user';
 interface LayoutProps {
-  user: { name?: string; email: string } | null;
+  user: User | null;
   onLogout: () => void;
 }
 
-const Layout: React.FC<LayoutProps> = ({ user, onLogout }) => {
+const Layout: React.FC<LayoutProps> = ({ user , onLogout }) => {
   return (
     <>
       <AppBar position="static" color="primary">
@@ -32,7 +32,7 @@ const Layout: React.FC<LayoutProps> = ({ user, onLogout }) => {
           {user ? (
             <>
               <Typography variant="body1" sx={{ mx: 2 }}>
-                Witaj, {user.name ? user.name : user.email}!
+                Witaj, {user ? (user.username ? user.username : user.email) : 'Gość'}!
               </Typography>
               <Button component={RouterLink} to="/tickets" color="inherit">
                 Twoje Zgłoszenia

@@ -1,15 +1,22 @@
 import { useState } from 'react';
 import { TextField, Button, Typography, Alert, Box } from '@mui/material';
 import React from 'react';
-import { login } from '../api/auth';
+import { login, getUser } from '../api/auth';
+import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from "jwt-decode";
+import { Dispatch, SetStateAction } from 'react';
+import User from '../types/user';
 
-const LoginPage: React.FC = () => {
-  
+interface LoginPageProps {
+  setUser: Dispatch<SetStateAction<User | null>>;
+}
+
+function LoginPage({ setUser }: LoginPageProps) {
+  const navigate = useNavigate();
   const [error, setError] = useState('');
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-
 
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -18,7 +25,14 @@ const LoginPage: React.FC = () => {
       console.log(data);
       localStorage.setItem('access', data.access);
       localStorage.setItem('refresh', data.refresh);
-      // TODO: Implement your navigation logic here
+      setError("");
+      const decoded = jwtDecode(data.access);
+      console.log("decoded JWT",decoded);
+      const user = await getUser()
+      localStorage.setItem('user', JSON.stringify(user));
+      console.log('Stored user:', user);
+      setUser(user);
+      navigate('/'); 
     } catch (error) {
       console.error('Błąd logowania:', error);
       setError("Niepoprawny email lub hasło");

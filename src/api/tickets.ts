@@ -5,7 +5,14 @@ export const getTickets = async () => {
   return response.data;
 };
 
-export const createTicket = async (ticketData: any) => {
-  const response = await api.post('/api/tickets/', ticketData);
+export interface CreateTicketPayload {
+  title: string;
+  client: string; // UUID of the client
+  employees?: string[]; // Optional UUIDs
+  status?: string | null;
+}
+
+export const createTicket = async (payload: CreateTicketPayload) => {
+  const response = await api.post('/api/tickets/', payload);
   return response.data;
 };

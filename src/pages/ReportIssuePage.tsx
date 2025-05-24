@@ -1,16 +1,16 @@
 import { useState } from 'react';
-import axios from 'axios';
 import { TextField, Button, Typography, Alert, Box } from '@mui/material';
 import React from 'react';
+import { createTicket } from '../api/tickets';
+import User from '../types/user';
 
 interface ReportIssuePageProps {
-  user: { name?: string; email: string } | null;
+  user: User | null;
 }
 
 const ReportIssuePage: React.FC<ReportIssuePageProps> = ({ user }) => {
   // Stan dla pól formularza, inicjalizowany danymi użytkownika jeśli dostępne
-  const [name, setName] = useState(user?.name || '');
-  const [email, setEmail] = useState(user?.email || '');
+  // const [name, setName] = useState(user?.name || '');
   const [description, setDescription] = useState('');
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
@@ -19,15 +19,18 @@ const ReportIssuePage: React.FC<ReportIssuePageProps> = ({ user }) => {
     e.preventDefault();
     setError('');
     setSuccessMessage('');
-    if (!name.trim() || !email.trim() || !description.trim()) {
+    if (!description.trim()) {
       setError('Proszę wypełnić wszystkie pola formularza.');
       return;
     }
     try {
-      await axios.post('/api/issues', { name, email, description });
+      await createTicket({
+        title: description,
+        client: user?.uuid || '',
+        status: "new"
+      });
       setSuccessMessage('Zgłoszenie zostało wysłane pomyślnie.');
-      setName(user?.name || '');
-      setEmail(user?.email || '');
+      // setName(user?.name || '');
       setDescription('');
     } catch (err) {
       console.error(err);
@@ -41,28 +44,11 @@ const ReportIssuePage: React.FC<ReportIssuePageProps> = ({ user }) => {
         Formularz zgłoszenia awarii
       </Typography>
       <Typography variant="body1" paragraph>
-        Opisz napotkany problem. Skontaktujemy się z Tobą na podany adres e-mail.
+        Opisz napotkany problem. Skontaktujemy się z Tobą na podany adres e-mail.
       </Typography>
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
       {successMessage && <Alert severity="success" sx={{ mb: 2 }}>{successMessage}</Alert>}
       <Box component="form" onSubmit={handleSubmit} noValidate>
-        <TextField 
-          fullWidth 
-          margin="normal" 
-          label="Imię i nazwisko" 
-          value={name} 
-          onChange={e => setName(e.target.value)} 
-          required 
-        />
-        <TextField 
-          fullWidth 
-          margin="normal" 
-          type="email"
-          label="Adres e-mail" 
-          value={email} 
-          onChange={e => setEmail(e.target.value)} 
-          required 
-        />
         <TextField 
           fullWidth 
           margin="normal" 
