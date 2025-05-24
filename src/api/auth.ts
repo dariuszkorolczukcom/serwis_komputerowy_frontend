@@ -14,3 +14,8 @@ export const getUser = async () => {
   const response = await api.get('/auth/users/me');
   return response.data;
 };
+
+export const activateUser = async (uid: string, token: string) => {
+  const response = await api.post('/auth/users/activation/', { uid, token });
+  return response.data;
+};

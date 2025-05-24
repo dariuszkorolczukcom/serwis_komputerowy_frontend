@@ -7,7 +7,7 @@ import ReportIssuePage from './pages/ReportIssuePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import TicketListPage from './pages/TicketListPage';
-// import User from './types/user';
+import ActivateUserPage from './pages/ActivateUserPage';
 
 
 function App() {
@@ -41,6 +41,7 @@ function App() {
         />
         <Route path="tickets" element={<TicketListPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="/activate/:token/:uid" element={<ActivateUserPage />} />
       </Route>
     </Routes>
   );

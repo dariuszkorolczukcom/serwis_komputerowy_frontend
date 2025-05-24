@@ -28,7 +28,7 @@ const RegisterPage: React.FC = () => {
       });
 
       if (response.status === 201) {
-        setSuccess('Rejestracja zakończona sukcesem. Możesz się teraz zalogować.');
+        setSuccess('Rejestracja zakończona sukcesem. Aktywacja konta nastąpi po potwierdzeniu adresu email.');
         setName('');
         setEmail('');
         setPassword('');

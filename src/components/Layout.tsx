@@ -21,16 +21,16 @@ const Layout: React.FC<LayoutProps> = ({ user , onLogout }) => {
           >
             SerwisApp
           </Typography>
-          <Button 
-            component={RouterLink} 
-            to="/add-ticket" 
-            color="inherit" 
-            startIcon={<ReportProblemOutlinedIcon />}
-          >
-            Zgłoś awarię
-          </Button>
           {user ? (
             <>
+              <Button 
+                component={RouterLink} 
+                to="/add-ticket" 
+                color="inherit" 
+                startIcon={<ReportProblemOutlinedIcon />}
+              >
+                Zgłoś awarię
+              </Button>
               <Typography variant="body1" sx={{ mx: 2 }}>
                 Witaj, {user ? (user.username ? user.username : user.email) : 'Gość'}!
               </Typography>
