@@ -46,10 +46,10 @@ const TicketListPage: React.FC<{ user: User | null; isStaff: boolean }> = ({ use
   console.log(user)
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [editedTitles, setEditedTitles] = useState<Record<string, string>>({});
+  const [eventTypes, setEventTypes] = useState< { slug: string; name: string; internal: boolean }[]>([]);
   const [eventForms, setEventForms] = useState<Record<string, {
     slug: string; type: string; description: string 
 }>>({});
-let eventTypes: { slug: string; name: string; internal: boolean }[];
 
   const fetchTickets = async () => {
     try {
@@ -63,7 +63,7 @@ let eventTypes: { slug: string; name: string; internal: boolean }[];
   const fetchEventTypes = async () => {
     try {
       const data = await getEventTypes();
-      eventTypes = data;
+      setEventTypes(data);
     } catch (error) {
       console.error('Błąd pobierania typów zdarzeń:', error);
     }
