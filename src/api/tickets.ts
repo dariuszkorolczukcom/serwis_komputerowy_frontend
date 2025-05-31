@@ -5,6 +5,19 @@ export const getTickets = async () => {
   return response.data;
 };
 
+export interface EventType {
+  slug: string;
+  name: string;
+  internal: boolean;
+}
+
+export interface Event{
+  uuid?: string;
+  type: string; 
+  date: string; 
+  description: string 
+}
+
 export interface CreateTicketPayload {
   title: string;
   client: string; // UUID of the client
@@ -36,8 +49,14 @@ export const editTicket = async (uuid: string, payload: EditTicketPayload) => {
 
 export const addTicketEvent = async (
   uuid: string,
-  payload: { type?: string; date: string; description: string }
+  payload: Event
 ) => {
   const response = await api.post(`/api/tickets/${uuid}/addEvent/`, payload);
   return response.data;
+};
+
+export const getEventTypes = async () => {
+  const response = await api.get(`/api/tickets/eventTypes/`);
+  const eventTypes = response.data.map((event: EventType) => ({slug: event.slug, name: event.name, internal: event.internal}));
+  return eventTypes;
 };
