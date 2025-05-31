@@ -41,7 +41,6 @@ const statusColors: Record<string, "default" | "primary" | "success" | "warning"
   answered: 'primary',
 };
 
-const eventTypes: { slug: string; name: string; internal: boolean }[] = await getEventTypes();
 
 const TicketListPage: React.FC<{ user: User | null; isStaff: boolean }> = ({ user, isStaff }) => {
   console.log(user)
@@ -50,6 +49,7 @@ const TicketListPage: React.FC<{ user: User | null; isStaff: boolean }> = ({ use
   const [eventForms, setEventForms] = useState<Record<string, {
     slug: string; type: string; description: string 
 }>>({});
+let eventTypes: { slug: string; name: string; internal: boolean }[];
 
   const fetchTickets = async () => {
     try {
@@ -60,7 +60,17 @@ const TicketListPage: React.FC<{ user: User | null; isStaff: boolean }> = ({ use
     }
   };
 
+  const fetchEventTypes = async () => {
+    try {
+      const data = await getEventTypes();
+      eventTypes = data;
+    } catch (error) {
+      console.error('Błąd pobierania typów zdarzeń:', error);
+    }
+  };
+
   useEffect(() => {
+    fetchEventTypes();
     fetchTickets();
   }, []);
 
