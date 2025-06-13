@@ -47,6 +47,13 @@ export const editTicket = async (uuid: string, payload: EditTicketPayload) => {
   return response.data;
 };
 
+export const getTicketEvents = async (
+  uuid: string,
+) => {
+  const response = await api.get(`/api/tickets/${uuid}`);
+  return response.data;
+};
+
 export const addTicketEvent = async (
   uuid: string,
   payload: Event

@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { usePDF } from 'react-to-pdf';
+
 import {
   getTickets,
   deleteTicket,
   editTicket,
   addTicketEvent,
   getEventTypes,
-  // EventType,
-  // Event,
+  getTicketEvents
 } from '../api/tickets';
 import {
   Box,
@@ -43,6 +44,8 @@ const statusColors: Record<string, "default" | "primary" | "success" | "warning"
 
 
 const TicketListPage: React.FC<{ user: User | null; isStaff: boolean }> = ({ user, isStaff }) => {
+     const { toPDF, targetRef } = usePDF({filename: 'page.pdf'});
+
   console.log(user)
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [editedTitles, setEditedTitles] = useState<Record<string, string>>({});
@@ -54,7 +57,17 @@ const TicketListPage: React.FC<{ user: User | null; isStaff: boolean }> = ({ use
   const fetchTickets = async () => {
     try {
       const data: { results: Ticket[] } = await getTickets();
-      setTickets(data.results);
+      const ticketsWithEvents: Ticket[] = await Promise.all(
+        data.results.map(async (ticket) => {
+          const ticketEvents = await getTicketEvents(ticket.uuid);
+          console.log("getTicketEvents", JSON.stringify(ticketEvents));
+          return {
+            ...ticket,
+            events: ticketEvents.events || [],
+          };
+        })
+      );
+      setTickets(ticketsWithEvents);
     } catch (error) {
       console.error('Błąd pobierania ticketów:', error);
     }
@@ -125,7 +138,8 @@ const TicketListPage: React.FC<{ user: User | null; isStaff: boolean }> = ({ use
       </Typography>
       <Grid container spacing={2}>
         {tickets.map((ticket) => (
-          <Grid size={{xs:12, md:6}} key={ticket.uuid}>
+          
+          <Grid ref={targetRef} size={{xs:12, md:6}} key={ticket.uuid}>
             <Card variant="outlined" sx={{ height: '100%' }}>
               <CardContent>
                 {isStaff ? (
@@ -158,6 +172,29 @@ const TicketListPage: React.FC<{ user: User | null; isStaff: boolean }> = ({ use
                   color={statusColors[ticket.status] || 'default'}
                   sx={{ mt: 2 }}
                 />
+                {/* Wyświetlanie historii zdarzeń */}
+                {ticket.events && ticket.events.length > 0 && (
+                  <Box sx={{ mt: 2 }}>
+                    <Typography variant="subtitle2" gutterBottom>
+                      Historia zdarzeń:
+                    </Typography>
+                    {ticket.events.map((event) => (
+                      <Box key={event.uuid} sx={{ mb: 1 }}>
+                        <Typography variant="body2" color="text.secondary">
+                          {new Date(event.date).toLocaleString()}
+                        </Typography>
+                        <Typography variant="body1">
+                          {event.description}
+                        </Typography>
+                      </Box>
+                    ))}
+                  </Box>
+                )}
+                
+                <Chip
+                  sx={{ mt: 2 }}
+                        color="secondary" onClick={() => toPDF()}label="Download PDF"
+                        />
 
                 {isStaff && (
                   <>
